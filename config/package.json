@@ -1,0 +1,5 @@
+{
+  "name": "@cosmi/config",
+  "version": "0.1.0",
+  "files": ["ts"]
+}

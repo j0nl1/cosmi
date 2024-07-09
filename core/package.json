@@ -1,0 +1,70 @@
+{
+  "name": "cosmi",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc"
+  },
+  "main": "./build/index.cjs",
+  "module": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "typings": "./build/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "build"
+  ],
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "default": "./build/index.cjs"
+    },
+    "./client": {
+      "types": "./build/client/index.d.ts",
+      "import": "./build/client/index.js",
+      "default": "./build/client/index.cjs"
+    },
+    "./store": {
+      "types": "./build/store/index.d.ts",
+      "import": "./build/store/index.js",
+      "default": "./build/store/index.cjs"
+    },
+    "./utils": {
+      "types": "./build/utils/index.d.ts",
+      "import": "./build/utils/index.js",
+      "default": "./build/utils/index.cjs"
+    },
+    "./types": {
+      "types": "./build/types/index.d.ts",
+      "import": "./build/types/index.js",
+      "default": "./build/types/index.cjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "store": [
+        "./build/store/index.d.ts"
+      ],
+      "client": [
+        "./build/client/index.d.ts"
+      ],
+      "utils": [
+        "./build/utils/index.d.ts"
+      ],
+      "types": [
+        "./build/types/index.d.ts"
+      ]
+    }
+  },
+  "dependencies": {
+    "cosmjs-types": "^0.9.0",
+    "viem": "^2.23.9",
+    "wagmi": "^2.14.12"
+  },
+  "devDependencies": {
+    "@cosmi/config": "workspace:^",
+    "@keplr-wallet/types": "^0.12.192"
+  },
+  "license": "MIT"
+}

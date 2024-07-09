@@ -1,0 +1,12 @@
+{
+  "name": "cosmi-monorepo",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "@biomejs/biome": "^1.9.4",
+    "typescript": "^5.8.2"
+  },
+  "packageManager": "pnpm@9.11.0",
+  "engines": { "node": "22.x" },
+  "license": "MIT"
+}

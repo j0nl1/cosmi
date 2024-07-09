@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@cosmi/config/ts/common.json",
+  "compilerOptions": {
+    "isolatedModules": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es2021"
+    ],
+    "jsx": "react-jsx",
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "outDir": "build",
+    "rootDir": "src"
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
+}

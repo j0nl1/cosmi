@@ -1,0 +1,40 @@
+{
+  "name": "@cosmi/react",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc"
+  },
+  "main": "./build/index.cjs",
+  "module": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "typings": "./build/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "build"
+  ],
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "default": "./build/index.cjs"
+    }
+  },
+  "dependencies": {
+    "cosmi": "workspace:*",
+    "use-sync-external-store": "^1.4.0",
+    "wagmi": "^2.14.12"
+  },
+  "devDependencies": {
+    "@cosmi/config": "workspace:^",
+    "@types/react": "18",
+    "@types/use-sync-external-store": "^0.0.6"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": ">=4.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "license": "MIT"
+}

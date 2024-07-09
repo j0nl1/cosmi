@@ -1,0 +1,55 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "files": {
+    "ignore": ["CHANGELOG.md", "pnpm-lock.yaml"]
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "useButtonType": "off"
+      },
+      "correctness": {
+        "noUnusedVariables": "error",
+        "useExhaustiveDependencies": "error"
+      },
+      "performance": {
+        "noReExportAll": "error",
+        "noDelete": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "useShorthandArrayType": "error"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "noConfusingVoidType": "off",
+        "noConsoleLog": "error",
+        "noExplicitAny": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "all",
+      "semicolons": "asNeeded"
+    }
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  }
+}
