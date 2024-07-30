@@ -1,6 +1,6 @@
 {
   "name": "@cosmi/react",
-  "version": "0.1.0",
+  "version": "0.2.7",
   "type": "module",
   "scripts": {
     "dev": "tsc -w",
@@ -11,9 +11,7 @@
   "types": "./build/index.d.ts",
   "typings": "./build/index.d.ts",
   "sideEffects": false,
-  "files": [
-    "build"
-  ],
+  "files": ["build"],
   "exports": {
     ".": {
       "types": "./build/index.d.ts",

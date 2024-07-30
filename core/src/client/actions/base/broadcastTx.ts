@@ -1,11 +1,11 @@
 import { withRetry } from 'viem'
 import type {
-  TxData,
-  Chain,
   Account,
+  Chain,
   Client,
-  Transport,
   CometBftRpcSchema,
+  Transport,
+  TxData,
 } from '../../../types/index.js'
 
 import { toBase64 } from '../../../utils/encoding.js'
@@ -60,6 +60,5 @@ export async function broadcastTx<
       `Failed to broadcast transaction: ${result.log} (code ${result.code}) in codespace ${result.codespace}`,
     )
   }
-
-  return result
+  return { ...result, hash: response.hash as string }
 }

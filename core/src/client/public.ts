@@ -1,39 +1,45 @@
 import type { Account, Chain, Client, Transport } from '../types/index.js'
 
 import {
-  queryChainStatus,
   type QueryChainStatusReturnType,
+  queryChainStatus,
 } from './actions/base/queryChainStatus.js'
 
 import {
-  queryAbci,
   type QueryAbciParameters,
   type QueryAbciReturnType,
+  queryAbci,
 } from './actions/base/queryAbci.js'
 
 import {
-  queryContractSmart,
   type QueryContractSmartParameters,
   type QueryContractSmartReturnType,
+  queryContractSmart,
 } from './actions/queryContractSmart.js'
 
 import {
-  queryAccount,
   type QueryAccountParameters,
   type QueryAccountReturnType,
+  queryAccount,
 } from './actions/base/queryAccount.js'
 
 import {
-  queryAllBalances,
   type QueryAllBalancesParameters,
   type QueryAllBalancesReturnType,
+  queryAllBalances,
 } from './actions/queryAllBalances.js'
 
 import {
-  queryDenomMetadata,
   type QueryDenomMetadataParameters,
   type QueryDenomMetadataReturnType,
+  queryDenomMetadata,
 } from './actions/queryDenomMetadata.js'
+
+import {
+  type QueryBalanceParameters,
+  type QueryBalanceReturnType,
+  queryBalance,
+} from './actions/queryBalance.js'
 
 export type PublicActions<
   _transport extends Transport = Transport,
@@ -52,6 +58,7 @@ export type PublicActions<
   queryDenomMetadata: (
     args: QueryDenomMetadataParameters,
   ) => QueryDenomMetadataReturnType
+  queryBalance: (args: QueryBalanceParameters) => QueryBalanceReturnType
 }
 
 export function publicActions<
@@ -68,5 +75,6 @@ export function publicActions<
     queryContractSmart: (args) => queryContractSmart(client, args),
     queryAllBalances: (args) => queryAllBalances(client, args),
     queryDenomMetadata: (args) => queryDenomMetadata(client, args),
+    queryBalance: (args) => queryBalance(client, args),
   }
 }

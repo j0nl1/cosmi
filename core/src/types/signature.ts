@@ -1,3 +1,5 @@
+import type { Coin } from './coin.js'
+
 export type SignDoc = {
   /**
    * body_bytes is protobuf serialization of a TxBody that matches the
@@ -17,4 +19,22 @@ export type SignDoc = {
   chainId: string
   /** account_number is the account number of the account in state */
   accountNumber: bigint
+}
+
+export type AminoSignDoc = {
+  chain_id: string
+  account_number: string
+  sequence: string
+  timeout_height?: string
+  fee: {
+    amount: Coin[]
+    gas: string
+    payer?: string
+    granter?: string
+  }
+  msgs: {
+    type: string
+    value: any
+  }[]
+  memo: string
 }

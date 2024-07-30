@@ -1,7 +1,7 @@
 {
   "name": "cosmi",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.2.7",
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc"
@@ -11,9 +11,7 @@
   "types": "./build/index.d.ts",
   "typings": "./build/index.d.ts",
   "sideEffects": false,
-  "files": [
-    "build"
-  ],
+  "files": ["build"],
   "exports": {
     ".": {
       "types": "./build/index.d.ts",
@@ -43,18 +41,10 @@
   },
   "typesVersions": {
     "*": {
-      "store": [
-        "./build/store/index.d.ts"
-      ],
-      "client": [
-        "./build/client/index.d.ts"
-      ],
-      "utils": [
-        "./build/utils/index.d.ts"
-      ],
-      "types": [
-        "./build/types/index.d.ts"
-      ]
+      "store": ["./build/store/index.d.ts"],
+      "client": ["./build/client/index.d.ts"],
+      "utils": ["./build/utils/index.d.ts"],
+      "types": ["./build/types/index.d.ts"]
     }
   },
   "dependencies": {

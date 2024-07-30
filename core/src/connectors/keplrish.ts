@@ -6,10 +6,8 @@ import {
   ResourceUnavailableRpcError,
   type RpcError,
   UserRejectedRequestError,
-  withRetry,
 } from 'viem'
-import { type Connector, createConnector, ProviderNotFoundError } from 'wagmi'
-import type { SignDoc } from '../types/signature.js'
+import { type Connector, ProviderNotFoundError, createConnector } from 'wagmi'
 import { createSigningClient } from '../client/clients.js'
 import type { Chain } from '../types/chain.js'
 import { toKeplrChainInfo } from '../utils/toKeplrChainRegistry.js'
@@ -78,9 +76,7 @@ export function keplrish(parameters: InjectedParameters = {}) {
 
   type Provider = WalletProvider | undefined
 
-  type Properties = {
-    signTx(signer: string, signDoc: SignDoc): Promise<any>
-  }
+  type Properties = {}
 
   type StorageItem = {
     [_ in 'injected.connected' | `${string}.disconnected`]: true
@@ -99,7 +95,7 @@ export function keplrish(parameters: InjectedParameters = {}) {
       get name() {
         return getTarget().name
       },
-      type: keplrish.type,
+      type: getTarget().name,
       async connect({ chainId: chain, isReconnecting } = {}) {
         const provider = await this.getProvider()
         if (!provider) throw new ProviderNotFoundError()
@@ -112,33 +108,40 @@ export function keplrish(parameters: InjectedParameters = {}) {
 
         try {
           if (!accounts?.length && !isReconnecting) {
-            await provider.enable(chainId.toString()).catch(async () => {
-              const chainInfo = config.chains.find(
-                (chain) => chain.id === chainId,
-              ) as Chain
-              const registry = chainInfo.custom?.registry
-              if (!registry)
-                throw new Error('Chain registry is required to suggest chain')
-              const { assets, chain } = registry
+            await provider
+              .enable(chainId.toString())
+              .catch(async (err: Error) => {
+                const chainInfo = config.chains.find(
+                  (chain) => chain.id === chainId,
+                ) as Chain
+                if (err.message === 'Invalid chain id') {
+                  const registry = chainInfo.custom?.registry
+                  if (!registry)
+                    throw new Error(
+                      'Chain registry is required to suggest chain',
+                    )
+                  const { assets, chain } = registry
 
-              const [chainRes, assetsRes] = await Promise.all([
-                fetch(chain),
-                fetch(assets),
-              ])
-              await provider.experimentalSuggestChain(
-                toKeplrChainInfo(await chainRes.json(), await assetsRes.json()),
-              )
-            })
+                  const [chainRes, assetsRes] = await Promise.all([
+                    fetch(chain),
+                    fetch(assets),
+                  ])
+                  await provider.experimentalSuggestChain(
+                    toKeplrChainInfo(
+                      await chainRes.json(),
+                      await assetsRes.json(),
+                    ),
+                  )
+                } else throw err
+              })
+          }
 
-            if (!accountsChanged) {
-              accountsChanged = this.onAccountsChanged?.bind(this)
-              addEventListener(
-                'keplr_keystorechange',
-                accountsChanged as unknown as EventListener,
-              )
-            }
-
-            accounts = await this.getAccounts()
+          if (!accountsChanged) {
+            accountsChanged = this.onAccountsChanged?.bind(this)
+            addEventListener(
+              'keplr_keystorechange',
+              accountsChanged as unknown as EventListener,
+            )
           }
 
           // Remove disconnected shim if it exists
@@ -197,8 +200,11 @@ export function keplrish(parameters: InjectedParameters = {}) {
           account: {
             address: '0x000',
             type: 'json-rpc',
-            signTx: async (sender: string, signDoc: SignDoc) =>
-              this.signTx(sender, signDoc),
+            getSigner: async (chainId: string) => {
+              const provider = await this.getProvider()
+              if (!provider) throw new ProviderNotFoundError()
+              return await provider.getOfflineSignerAuto(chainId)
+            },
           },
           transport: config.transports![chainId],
           chain: config.chains.find((chain) => chain.id === chainId),
@@ -221,11 +227,10 @@ export function keplrish(parameters: InjectedParameters = {}) {
             if (!connected) return false
           }
 
-          // Use retry strategy as some injected wallets (e.g. MetaMask) fail to
-          // immediately resolve JSON-RPC requests on page load.
-          const accounts = await withRetry(() => this.getAccounts())
+          const accounts = await this.getAccounts()
           return !!accounts.length
         } catch {
+          await config.storage?.setItem(`${this.id}.disconnected`, true)
           return false
         }
       },
@@ -274,12 +279,6 @@ export function keplrish(parameters: InjectedParameters = {}) {
         // only called when the wallet is disconnected through the wallet's interface, meaning the wallet
         // actually disconnected and we don't need to simulate it.
         config.emitter.emit('disconnect')
-      },
-      async signTx(signer, signDoc) {
-        const provider = await this.getProvider()
-        if (!provider) throw new ProviderNotFoundError()
-
-        return await provider.signDirect(signDoc.chainId, signer, signDoc)
       },
     }),
   )
